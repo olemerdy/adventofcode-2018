@@ -24,9 +24,17 @@ object Day01Part1 extends App {
 object Day01Part2 extends App {
 
   def repeat(numbers: List[Int]): Stream[Int] =
-    Stream.continually(Day01.numbers.toStream).flatten
+    Stream.continually(numbers.toStream).flatten
 
-  def firstFrequencyReachedTwice(changes: Stream[Int]): Int = ???
+  def firstFrequencyReachedTwice(changes: Stream[Int]): Int = {
+    def rec(changes: Stream[Int], current: Int, previous: Set[Int]): Int =
+      changes match {
+        case x #:: _ if previous.contains(current + x) => current + x
+        case x #:: xs => rec(xs, current + x, previous + current)
+      }
+
+    rec(changes, 0, Set(0))
+  }
 
   println(firstFrequencyReachedTwice(repeat(Day01.numbers)))
 }
